@@ -128,7 +128,7 @@ app.put('/api/articulos/:id', (req,res)=>{
 
 });
 
-//ELIMINAR ARTICULO
+//ELIMINAR ARTICULO (id)
 app.delete('/api/articulos/:id',(req, res)=>{
     connection.query("DELETE FROM articulos WHERE id =?", [req.params.id],function(error, filas){
 
