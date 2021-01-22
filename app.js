@@ -10,6 +10,7 @@ app.use(express.json());
 
 //UTILIZAR CORS
 app.use(cors());
+//
 
 //MYSQL parametros de conexion
 var connection = mysql.createConnection({
