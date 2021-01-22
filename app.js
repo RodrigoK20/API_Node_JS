@@ -80,28 +80,44 @@ app.post('/api/articulos',(req,res)=>{
     //Validar si existe valor en la BD.
     let validarArticulo = data.descripcion;
 
-    let consulta = "SELECT descripcion FROM articulos WHERE descripcion=" +validarArticulo;
-    //console.log("esta es la consulta de validacion:" + consulta);
+   
+    //Consultar si ya existe el articulo registrado
+    connection.query("SELECT COUNT(id) as count FROM articulos WHERE descripcion=?", [validarArticulo],(error,filas)=>{
 
+        //res.send(filas);
+        console.log(filas[0].count);
 
+        var siExiste = filas[0].count;
 
-    let sql= "INSERT INTO articulos SET ?";
-    
-    connection.query(sql, data, function(error,results){
+        if(siExiste>0){
+            console.log("El articulo ya se encuentra registrado en la base de datos");
+            res.status(201).json();
 
-        if(error){
-            throw error;
         }
 
         else{
-          
-            res.send(results);
-            console.log('Articulo guardado');
            
+            //console.log("El articulo NO se encuentra registrado en la base de datos");
+     
+            let sql= "INSERT INTO articulos SET ?";
+    
+            connection.query(sql, data, function(error,results){
+    
+                res.send(results);
+                res.status(200);
+                console.log('Articulo guardado');
+                return 1;
+                              
+            })
+        
         }
+        
+           
+    })
 
-    });
-})
+
+});
+
 //EDITAR ARTICULO
 app.put('/api/articulos/:id', (req,res)=>{
 
