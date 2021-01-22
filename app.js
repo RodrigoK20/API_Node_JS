@@ -81,7 +81,7 @@ app.post('/api/articulos',(req,res)=>{
     let validarArticulo = data.descripcion;
 
    
-    //Consultar si ya existe el articulo registrado
+    //Consultar si ya existe el articulo registrado.
     connection.query("SELECT COUNT(id) as count FROM articulos WHERE descripcion=?", [validarArticulo],(error,filas)=>{
 
         //res.send(filas);
@@ -106,7 +106,7 @@ app.post('/api/articulos',(req,res)=>{
                 res.send(results);
                 res.status(200);
                 console.log('Articulo guardado');
-                return 1;
+         
                               
             })
         
