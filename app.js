@@ -127,21 +127,42 @@ app.put('/api/articulos/:id', (req,res)=>{
     let precio = req.body.precio;
     let stock = req.body.stock;
 
-    let sql = "UPDATE articulos SET descripcion = ?, precio = ?, stock = ? WHERE id = ?";
+    //Consultar si ya existe el articulo registrado diferente al actual
+     connection.query("SELECT count(a.id) as count FROM articulos a WHERE a.descripcion=? AND a.id!=?", [descripcion,id],(error,filas)=>{
 
-    //Colocar ID al final del arreglo
-    connection.query(sql,[descripcion,precio,stock,id],function(error,results){
+        //res.send(filas);
+       // console.log(filas[0].count);
 
-        if(error){
-            throw error;
+        var siExiste = filas[0].count;
+        console.log(siExiste);
+
+        if(siExiste>0){
+            console.log("El articulo ya se encuentra registrado en la base de datos");
+            res.status(201).json();
+
         }
 
         else{
-          
-            res.send(results);
            
+            //console.log("El articulo NO se encuentra registrado en la base de datos");
+     
+            let sql = "UPDATE articulos SET descripcion = ?, precio = ?, stock = ? WHERE id = ?";
+
+                 //Colocar ID al final del arreglo
+                connection.query(sql,[descripcion,precio,stock,id],function(error,results){
+    
+                res.send(results);
+                res.status(200);
+                console.log('Articulo editado');
+         
+                              
+            })
+        
         }
+        
+           
     })
+
 
 });
 
